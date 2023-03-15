@@ -16,7 +16,6 @@ from sklearn.cluster import KMeans
 import colorsys
 import os
 img = cv2.imread('./result.png')
-print("이미지는 어떻게 찍힐까?", img)
 cv2.imshow("Lenna", img)  # 불러온 이미지를 Lenna라는 이름으로 창 표시.
 
 print(img.shape)
@@ -42,7 +41,6 @@ def centroid_histogram(clt):
     # grab the number of different clusters and create a histogram
     # based on the number of pixels assigned to each cluster
     numLabels = np.arange(0, len(np.unique(clt.labels_)) + 1)
-    print("이게 뭘까?", numLabels, "얘는?", clt.labels_)
     (hist, _) = np.histogram(clt.labels_, bins=numLabels)
 
     # normalize the histogram, such that it sums to one
@@ -54,7 +52,6 @@ def centroid_histogram(clt):
 
 
 hist = centroid_histogram(clt)
-print("여기가 마지막이지?", hist)
 
 print(hist.shape)
 max_index = hist.argmax()
@@ -91,7 +88,6 @@ print(bar[1])
 
 mylists = []
 for a, b, c in mylist:
-    print("여기", a, b, c)
     if [a, b, c] not in mylists:
         mylists.append([a, b, c])
 
