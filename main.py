@@ -15,15 +15,53 @@ from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
 import colorsys
 import os
-img = cv2.imread('./result.png')
-cv2.imshow("Lenna", img)  # 불러온 이미지를 Lenna라는 이름으로 창 표시.
+imageUrl = 'images/t-shirt.jpg'
+img = cv2.imread(imageUrl)
+img = cv2.resize(img, dsize=(0, 0), fx=0.2, fy=0.2,
+                 interpolation=cv2.INTER_LINEAR)
 
-print(img.shape)
-img = img.reshape(50, 50, 3)
-image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-print("이미지 rgb", image)
-image = image.reshape((image.shape[0] * image.shape[1], 3))  # height, width 통합
-print(image.shape)
+mask = np.zeros(img.shape[:2], np.uint8)
+
+bgdModel = np.zeros((1, 65), np.float64)
+fgdModel = np.zeros((1, 65), np.float64)
+
+rect = (53, 139, 538, 583)
+cv2.grabCut(img, mask, rect, bgdModel, fgdModel, 5, cv2.GC_INIT_WITH_RECT)
+
+mask2 = np.where((mask == 2) | (mask == 0), 0, 1).astype('uint8')
+img = img*mask2[:, :, np.newaxis]
+
+tmp = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+_, alpha = cv2.threshold(tmp, 0, 255, cv2.THRESH_BINARY)
+b, g, r = cv2.split(img)
+rgba = [b, g, r, alpha]
+dst = cv2.merge(rgba, 4)
+
+cv2.imwrite("result.png", dst)
+
+grabcut_image = cv2.imread('result.png')
+
+x_pos, y_pos, width, height = cv2.selectROI(
+    "location", grabcut_image, False, False)
+
+grabcut_image = grabcut_image[y_pos:y_pos+height, x_pos:x_pos+width]
+cv2.imshow("grabcut_image", grabcut_image)
+cv2.waitKey(0)
+cv2.imwrite("grabcut_image.png", grabcut_image)
+# kmeans
+# 그랩컷한 이미지 출력
+grabcut_image = cv2.imread('grabcut_image.png')
+cv2.imshow("grabcut_image", grabcut_image)
+
+# BGR로 된 그랩컷 이미지를 RGB로 바꿈.
+image = cv2.cvtColor(grabcut_image, cv2.COLOR_BGR2RGB)
+
+print("현재 이미지 크기 -> ", image.shape)
+print("이미지 R G B => ", image)
+
+# 이미지 height, width 통합 // kmeans 입력 데이터 조건 맞추기 위해 차원 변경
+image = image.reshape((image.shape[0] * image.shape[1], 3))
+# print("이미지 크기 => " ,image.shape)
 
 
 k = 3  # 예제는 5개로 나누겠습니다
@@ -79,9 +117,7 @@ def plot_colors(hist, centroids):
 bar = plot_colors(hist, clt.cluster_centers_)
 # 중복값 제거
 
-print("타입", bar.shape)
-print("bar0", type(bar[1]))
-print("타입", bar[1][1])
+
 mylist = bar[0]
 print(bar[0])
 print(bar[1])
@@ -91,8 +127,7 @@ for a, b, c in mylist:
     if [a, b, c] not in mylists:
         mylists.append([a, b, c])
 
-print(mylists[1])
-print(mylists[2])
+
 # 옷의 밝기 인식을 위한 명도 구하기
 h1, s1, v1 = colorsys.rgb_to_hsv(
     mylists[max_index][0]/255, mylists[max_index][1]/255, mylists[max_index][2]/255)
