@@ -64,15 +64,23 @@ image = image.reshape((image.shape[0] * image.shape[1], 3))
 # print("이미지 크기 => " ,image.shape)
 
 
-k = 3  # 예제는 5개로 나누겠습니다
-# 결과 항상 고정
+# 군집형성의 개수를 3으로 설정
+
+k = 3
+# 학습의 동일한 결과를 위해 random_state를 10으로 고정
+# k평균 군집화 알고리즘 함수를 활용해 특정 군집 개수만큼 군집화 진행
+
 clt = KMeans(n_clusters=k, random_state=10)
-print(clt)
+# print("kmeans 한 결과 => " ,clt)
+# image에 대한 클러스터링 수행
+
 clt.fit(image)
 
-# .cluster_centers_ 라는 함수를 통해서 좌표값을 확인할 수 있다.
+# .cluster_centers_ 라는 함수를 통해서 중심점 확인
 for center in clt.cluster_centers_:
     print(center)
+
+# 중심점 통해비율 구하는 함수
 
 
 def centroid_histogram(clt):
@@ -90,9 +98,13 @@ def centroid_histogram(clt):
 
 
 hist = centroid_histogram(clt)
+print("색상 비율 출력 => ", hist)
 
-print(hist.shape)
+# 가장 많은 비율 차지하고 있는 index 추출
+
 max_index = hist.argmax()
+
+# bar 그려주기 위한 함수
 
 
 def plot_colors(hist, centroids):
@@ -116,12 +128,11 @@ def plot_colors(hist, centroids):
 
 bar = plot_colors(hist, clt.cluster_centers_)
 # 중복값 제거
-
+print("bar 크기 =>", bar.shape)
 
 mylist = bar[0]
-print(bar[0])
-print(bar[1])
 
+# 비율 rgb 담기 위한 my_lists
 mylists = []
 for a, b, c in mylist:
     if [a, b, c] not in mylists:
