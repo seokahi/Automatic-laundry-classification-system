@@ -22,4 +22,4 @@ print(class_index)
 print('Predicted class:', class_names[class_index])
 
 plt.imshow(img)
-plt.show()ㄴ
+plt.show()
