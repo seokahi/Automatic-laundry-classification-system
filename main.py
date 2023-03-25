@@ -1,9 +1,5 @@
-
-# kmeans
-from PIL import Image
 from keras.models import load_model
 from keras.datasets import mnist
-import numpy
 from keras.layers import Dense
 from keras.models import Sequential
 from keras.utils import np_utils
@@ -14,146 +10,28 @@ import cv2
 from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
 import colorsys
-import os
-imageUrl = 'images/t-shirt.jpg'
-img = cv2.imread(imageUrl)
-img = cv2.resize(img, dsize=(0, 0), fx=0.2, fy=0.2,
-                 interpolation=cv2.INTER_LINEAR)
+from PIL import Image
+import tensorflow as tf
+from tensorflow import keras
 
+img = cv2.imread('images/t-shirt.jpg')
 mask = np.zeros(img.shape[:2], np.uint8)
 
+# 전경/배경 지정 (알고리즘은 전경과 배경을 기준으로 이미지를 분할합니다)
 bgdModel = np.zeros((1, 65), np.float64)
 fgdModel = np.zeros((1, 65), np.float64)
 
-rect = (53, 139, 538, 583)
+# 이미지의 중심을 기준으로, 가로 길이와 세로 길이가 이미지 크기의 1/10인 사각형을 초기 ROI로 설정합니다.
+rows, cols = img.shape[:2]
+rect = (int(cols/10), int(rows/10), int(cols*0.8), int(rows*0.8))
+
+# GrabCut을 실행합니다.
 cv2.grabCut(img, mask, rect, bgdModel, fgdModel, 5, cv2.GC_INIT_WITH_RECT)
+# 전경 마스크를 만듭니다. (GrabCut 결과에서 전경을 1, 배경을 0으로 설정합니다.)
+fg_mask = np.where((mask == cv2.GC_FGD) | (
+    mask == cv2.GC_PR_FGD), 1, 0).astype('uint8')
 
-mask2 = np.where((mask == 2) | (mask == 0), 0, 1).astype('uint8')
-img = img*mask2[:, :, np.newaxis]
-
-tmp = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-_, alpha = cv2.threshold(tmp, 0, 255, cv2.THRESH_BINARY)
-b, g, r = cv2.split(img)
-rgba = [b, g, r, alpha]
-dst = cv2.merge(rgba, 4)
-
-cv2.imwrite("result.png", dst)
-
-grabcut_image = cv2.imread('result.png')
-
-x_pos, y_pos, width, height = cv2.selectROI(
-    "location", grabcut_image, False, False)
-
-grabcut_image = grabcut_image[y_pos:y_pos+height, x_pos:x_pos+width]
-cv2.imshow("grabcut_image", grabcut_image)
-cv2.waitKey(0)
-cv2.imwrite("grabcut_image.png", grabcut_image)
-# kmeans
-# 그랩컷한 이미지 출력
-grabcut_image = cv2.imread('grabcut_image.png')
-cv2.imshow("grabcut_image", grabcut_image)
-
-# BGR로 된 그랩컷 이미지를 RGB로 바꿈.
-image = cv2.cvtColor(grabcut_image, cv2.COLOR_BGR2RGB)
-
-print("현재 이미지 크기 -> ", image.shape)
-print("이미지 R G B => ", image)
-
-# 이미지 height, width 통합 // kmeans 입력 데이터 조건 맞추기 위해 차원 변경
-image = image.reshape((image.shape[0] * image.shape[1], 3))
-# print("이미지 크기 => " ,image.shape)
-
-
-# 군집형성의 개수를 3으로 설정
-
-k = 3
-# 학습의 동일한 결과를 위해 random_state를 10으로 고정
-# k평균 군집화 알고리즘 함수를 활용해 특정 군집 개수만큼 군집화 진행
-
-clt = KMeans(n_clusters=k, random_state=10)
-# print("kmeans 한 결과 => " ,clt)
-# image에 대한 클러스터링 수행
-
-clt.fit(image)
-
-# .cluster_centers_ 라는 함수를 통해서 중심점 확인
-for center in clt.cluster_centers_:
-    print(center)
-
-# 중심점 통해비율 구하는 함수
-
-
-def centroid_histogram(clt):
-    # grab the number of different clusters and create a histogram
-    # based on the number of pixels assigned to each cluster
-    numLabels = np.arange(0, len(np.unique(clt.labels_)) + 1)
-    (hist, _) = np.histogram(clt.labels_, bins=numLabels)
-
-    # normalize the histogram, such that it sums to one
-    hist = hist.astype("float")
-    hist /= hist.sum()
-
-    # return the histogram
-    return hist
-
-
-hist = centroid_histogram(clt)
-print("색상 비율 출력 => ", hist)
-
-# 가장 많은 비율 차지하고 있는 index 추출
-
-max_index = hist.argmax()
-
-# bar 그려주기 위한 함수
-
-
-def plot_colors(hist, centroids):
-    # initialize the bar chart representing the relative frequency
-    # of each of the colors
-    bar = np.zeros((12, 36, 3), dtype="uint8")
-    startX = 0
-
-    # loop over the percentage of each cluster and the color of
-    # each cluster
-    for (percent, color) in zip(hist, centroids):
-        # plot the relative percentage of each cluster
-        endX = startX + (percent * 36)
-        cv2.rectangle(bar, (int(startX), 0), (int(endX), 12),
-                      color.astype("uint8").tolist(), -1)
-        startX = endX
-
-    # return the bar chart
-    return bar
-
-
-bar = plot_colors(hist, clt.cluster_centers_)
-# 중복값 제거
-print("bar 크기 =>", bar.shape)
-
-mylist = bar[0]
-
-# 비율 rgb 담기 위한 my_lists
-mylists = []
-for a, b, c in mylist:
-    if [a, b, c] not in mylists:
-        mylists.append([a, b, c])
-
-
-# 옷의 밝기 인식을 위한 명도 구하기
-h1, s1, v1 = colorsys.rgb_to_hsv(
-    mylists[max_index][0]/255, mylists[max_index][1]/255, mylists[max_index][2]/255)
-
-print("명도", v1)
-# 밝음
-if (v1 > 0.5):
-    flag = 1
-# 어두움
-else:
-    flag = 0
-
-print("밝은 옷: 1 어두운 옷: 0 =>", flag)
-# show our color bartS
-plt.figure()
-plt.axis("off")
-plt.imshow(bar)
-plt.show()
+# 전경 마스크를 모든 채널에 적용합니다.
+result = cv2.bitwise_and(img, img, mask=fg_mask)
+cv2.imwrite("result.png", result)
+plt.imshow(result), plt.colorbar(), plt.show()
