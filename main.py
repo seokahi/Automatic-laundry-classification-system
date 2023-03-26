@@ -14,24 +14,37 @@ from PIL import Image
 import tensorflow as tf
 from tensorflow import keras
 
-img = cv2.imread('images/t-shirt.jpg')
+imageUrl = 'images/t-shirt.jpg'
+img = cv2.imread(imageUrl)
+img = cv2.resize(img, dsize=(0, 0), fx=0.2, fy=0.2,
+                 interpolation=cv2.INTER_LINEAR)
+
 mask = np.zeros(img.shape[:2], np.uint8)
 
-# 전경/배경 지정 (알고리즘은 전경과 배경을 기준으로 이미지를 분할합니다)
 bgdModel = np.zeros((1, 65), np.float64)
 fgdModel = np.zeros((1, 65), np.float64)
 
-# 이미지의 중심을 기준으로, 가로 길이와 세로 길이가 이미지 크기의 1/10인 사각형을 초기 ROI로 설정합니다.
-rows, cols = img.shape[:2]
-rect = (int(cols/10), int(rows/10), int(cols*0.8), int(rows*0.8))
-
-# GrabCut을 실행합니다.
+rect = (53, 139, 538, 583)
 cv2.grabCut(img, mask, rect, bgdModel, fgdModel, 5, cv2.GC_INIT_WITH_RECT)
-# 전경 마스크를 만듭니다. (GrabCut 결과에서 전경을 1, 배경을 0으로 설정합니다.)
-fg_mask = np.where((mask == cv2.GC_FGD) | (
-    mask == cv2.GC_PR_FGD), 1, 0).astype('uint8')
 
-# 전경 마스크를 모든 채널에 적용합니다.
-result = cv2.bitwise_and(img, img, mask=fg_mask)
-cv2.imwrite("result.png", result)
-plt.imshow(result), plt.colorbar(), plt.show()
+mask2 = np.where((mask == 2) | (mask == 0), 0, 1).astype('uint8')
+img = img*mask2[:, :, np.newaxis]
+
+tmp = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+_, alpha = cv2.threshold(tmp, 0, 255, cv2.THRESH_BINARY)
+b, g, r = cv2.split(img)
+rgba = [b, g, r, alpha]
+dst = cv2.merge(rgba, 4)
+
+cv2.imwrite("result.png", dst)
+
+grabcut_image = cv2.imread('result.png')
+
+x_pos, y_pos, width, height = cv2.selectROI(
+    "location", grabcut_image, False, False)
+
+grabcut_image = grabcut_image[y_pos:y_pos+height, x_pos:x_pos+width]
+cv2.imshow("grabcut_image", grabcut_image)
+cv2.waitKey(0)
+cv2.imwrite("grabcut_image.png", grabcut_image)
+
