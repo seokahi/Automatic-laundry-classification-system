@@ -41,10 +41,17 @@ mask2 = np.where((mask == cv2.GC_FGD) | (
 # 전경 마스크를 이미지에 적용하여 전경만 추출
 result = cv2.bitwise_and(img, img, mask=mask2)
 
+result2 = result.copy()
+
+mask3 = cv2.inRange(result2, np.array([0,0,0]), np.array([10,10,10]))
+result2[mask3 == 255] = (255, 255, 255)
+
 # 결과 출력
 cv2.imshow('result', result)
+cv2.imshow('result2', result2)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 cv2.imwrite("result.png", result)
+cv2.imwrite("result2.png", result2)
 
 
