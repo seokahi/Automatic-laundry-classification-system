@@ -156,4 +156,36 @@ plt.imshow(bar)
 plt.show()
 
 
+# 패션 알고리즘
+MNIST_model = keras.models.load_model('custom_final.h5')
+img = tf.keras.utils.load_img(
+    'result2.png',
+    target_size=(28, 28),
+    color_mode='grayscale'
+)
+img_array = tf.keras.utils.img_to_array(img)
+
+image = np.expand_dims(img_array, axis=-1)
+image = np.expand_dims(img_array, axis=0)
+
+predictions = MNIST_model.predict(image)
+score = tf.nn.softmax(predictions[0])
+
+class_index = np.argmax(predictions[0])
+class_names = ['bra', 'pantie', 'pants', 'shirt',
+               'short pants', 'skirt', 'socks', 't-shirt']
+
+print(class_index)
+print('Predicted class:', class_names[class_index])
+
+plt.imshow(img)
+plt.show()
+
+if (class_names[class_index] == "bra" or class_names[class_index] == "pantie"):
+    print("분석 결과 : 속옷")
+elif ((class_names[class_index] != "bra" or class_names[class_index] == "pantie") and flag == 1):
+    print("분석 결과 : 밝은 색상 의류")
+else:
+    print("분석 결과 : 어두운 색상 의류")
+
 
