@@ -40,9 +40,7 @@ while True:
         #                 interpolation=cv2.INTER_LINEAR)
         # rect = cv2.selectROI("location", img, False, False)
         # print(rect)
-        rect = cv2.selectROI("location", img, False, False)
-
-
+        rect = (70,20,550,400)
         cv2.destroyAllWindows()
 
         # GrabCut 실행을 위한 초기 마스크 생성
@@ -68,17 +66,13 @@ while True:
         result2[mask3 == 255] = (255, 255, 255)
 
         # 결과 출력
-        cv2.imshow('result', result)
-        cv2.imshow('result2', result2)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
         cv2.imwrite("result.png", result)
         cv2.imwrite("result2.png", result2)
 
-        img = cv2.imread('result.png')
+        img = cv2.imread('result2.png')
         image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        mask = cv2.inRange(image, (1, 1, 1), (255, 255, 255))
+        mask = cv2.inRange(image, (0, 0, 0), (255, 255, 255))
         image = cv2.bitwise_and(image, image, mask=mask)
         cv2.imshow("remove_black", image)
 
