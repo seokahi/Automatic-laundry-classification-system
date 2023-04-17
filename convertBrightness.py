@@ -22,14 +22,14 @@ def adjust_brightness(input_image_path, output_image_path, factor):
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
-factor = 0.5
+factor = 0.2
 for filename in os.listdir(input_folder):
     # 이미지 파일인 경우에만 처리
     if filename.endswith(".jpg") or filename.endswith(".png"):
         input_path = os.path.join(input_folder, filename)
         output_path = os.path.join(output_folder, filename)
         adjust_brightness(input_path, output_path, factor)
-
+print(len(os.listdir(output_folder)))
 
 # # 이미지 로드
 # img = Image.open("image.jpg")
