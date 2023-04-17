@@ -2,6 +2,11 @@ from PIL import Image
 from PIL import ImageEnhance
 import os
 
+input_folder = '/content/drive/MyDrive/cap/week13/short_sleeve'  # 입력 폴더 경로
+# input_folder = '/content/drive/MyDrive/cap/short_sleeve'
+output_folder = '/content/drive/MyDrive/cap/week13/short_sleeve_out_daebi/'  # 출력 폴더 경로
+
+
 def adjust_brightness(input_image_path, output_image_path, factor):
     with Image.open(input_image_path) as img:
         # 명도 조절
@@ -14,12 +19,10 @@ def adjust_brightness(input_image_path, output_image_path, factor):
         output.save(output_image_path)
 
 # 폴더 내의 모든 이미지에 대해 명도를 조절
-input_folder = 'C:/Python/OpenCV/AutoCrawler-master/download/socks'  # 입력 폴더 경로
-output_folder = 'C:/Python/OpenCV/AutoCrawler-master/download/socks-ouput'  # 출력 폴더 경로
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
-factor = 0.9
+factor = 0.5
 for filename in os.listdir(input_folder):
     # 이미지 파일인 경우에만 처리
     if filename.endswith(".jpg") or filename.endswith(".png"):
