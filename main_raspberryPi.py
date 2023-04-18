@@ -40,7 +40,7 @@ while True:
         #                 interpolation=cv2.INTER_LINEAR)
         # rect = cv2.selectROI("location", img, False, False)
         # print(rect)
-        rect = (70,20,550,400)
+        rect = (72,10,540,400)
         cv2.destroyAllWindows()
 
         # GrabCut 실행을 위한 초기 마스크 생성
