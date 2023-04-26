@@ -62,3 +62,9 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 model.summary()
+
+model.fit(train_set, epochs=20, batch_size=32, validation_data=valid_set)
+# model.fit(train_set_re, train_set.class_indices, epochs=10)
+#, valid_set.class_indices
+#, validation_data=valid_set
+model.save('custom.h5')
