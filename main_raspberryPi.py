@@ -158,10 +158,12 @@ while True:
         print("명도", v1)
         # 밝음
         if (v1 > 0.5):
-            flag = 1
-        # 어두움
+            # flag = 1
+            flag = "light"
+        # ?��?��???
         else:
-            flag = 0
+            # flag = 0
+            flag= "dark"
 
         print("밝은 옷: 1 어두운 옷: 0 =>", flag)
         # show our color bartS
@@ -172,7 +174,7 @@ while True:
 
 
         # 패션 알고리즘
-        MNIST_model = keras.models.load_model('custom_final.h5')
+        MNIST_model = tf.keras.models.load_model('/home/pi/caps/custom_v6.h5', compile=False)
         img = tf.keras.utils.load_img(
             'result2.png',
             target_size=(28, 28),
