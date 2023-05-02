@@ -2,8 +2,8 @@ import os
 import glob
 import shutil
 
-path = 'dataset/dataset/short pants'
-save_path = 'dataset/dataset/short pants/'
+path = 'dataset/dataset/bra'
+save_path = 'dataset/dataset/bra/'
 
 cnt = len(os.listdir(save_path))
 files = glob.glob(path + '/*')
@@ -13,7 +13,7 @@ for i, f in enumerate(files):
     fname = ftitle.split('_')[0]  # 파일이름
 
     # 파일이름을 fname_0000.jpg 이런 식으로 변경
-    filename = save_path + 'short_pants' + '_' + '{0:04d}'.format(cnt) + fext
+    filename = save_path + 'bra' + '_' + '{0:04d}'.format(cnt) + fext
     print(filename)
 
     # Use shutil.move to overwrite existing files
