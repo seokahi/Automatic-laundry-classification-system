@@ -56,7 +56,7 @@ while True:
         #                 interpolation=cv2.INTER_LINEAR)
         # rect = cv2.selectROI("location", img, False, False)
         # print(rect)
-        rect = (70, 60, 480, 390) #ROIl
+        rect = (70, 0, 480, 390) #ROIl
         # rect = (70,20,550,400)
         cv2.destroyAllWindows()
 
