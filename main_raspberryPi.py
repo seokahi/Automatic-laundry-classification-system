@@ -9,16 +9,21 @@ import colorsys
 from tensorflow import keras
 import tensorflow.keras.preprocessing.image as tpi
 import glob
-
+import RPi.GPIO as GPIO
 port_name = glob.glob('/dev/ttyACM*')
 print(port_name)
 ser = serial.Serial(port_name[0], 9600, timeout=1) # 아두이노와 시리얼 통신 ser설정
-button_state = ''
-flag = 0
+button_pin = 15
 
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+
+
+GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+time.sleep(1)
 while True:
-    start = time.time()
-    button_state = ''
+    time.sleep(0.1)
     if ser.in_waiting > 0 and flag == 0:
         button_state = ser.readline().decode('ascii').rstrip() 
         print(button_state)
@@ -28,7 +33,6 @@ while True:
     print("serial connection time: ", time.time() - start)
     if button_state == '1': # 버튼이 눌리면
         ####
-        start = time.time()
         camera = cv2.VideoCapture(0)
         ret, frame = camera.read()
         if camera.isOpened():
@@ -90,7 +94,6 @@ while True:
         cv2.imwrite("result2.png", result2)
         print("mask processing part: ", start - time.time())
         ####
-        start = time.time()
         #####################################################################################
 
         ########################################################################################################
