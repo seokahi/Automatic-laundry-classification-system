@@ -24,14 +24,8 @@ GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 time.sleep(1)
 while True:
     time.sleep(0.1)
-    if ser.in_waiting > 0 and flag == 0:
-        button_state = ser.readline().decode('ascii').rstrip() 
-        print(button_state)
-        if button_state is not None:
-            flag = 1
-        print(type(button_state))
-    print("serial connection time: ", time.time() - start)
-    if button_state == '1': # 버튼이 눌리면
+    
+    if GPIO.input(button_pin) == GPIO.HIGH: # 버튼이 눌리면
         ####
         camera = cv2.VideoCapture(0)
         ret, frame = camera.read()
@@ -60,8 +54,10 @@ while True:
         #                 interpolation=cv2.INTER_LINEAR)
         # rect = cv2.selectROI("location", img, False, False)
         # print(rect)
-        rect = (70, 0, 480, 390) #ROIl
+        # rect = (70, 0, 480, 390) #ROIl
         # rect = (70,20,550,400)
+        rect = cv2.selectROI("location", img, False, False)
+
         cv2.destroyAllWindows()
 
         mask = np.zeros(img.shape[:2], np.uint8)
@@ -232,7 +228,6 @@ while True:
             print("light clothes")
             ser.write(b'3\n')
         
-        button_state = ''
-        flag = 0
+        GPIO.input(button_pin) == GPIO.LOW
         ####################################################################################### fasjion-mnist ?  고리 ? ################################################################################
         
