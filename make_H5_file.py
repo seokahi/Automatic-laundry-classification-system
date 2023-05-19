@@ -27,8 +27,8 @@ valid_set = tf.keras.utils.image_dataset_from_directory(directory='/content/driv
 image_data = tf.keras.utils.image_dataset_from_directory(directory='/content/drive/MyDrive/cap/custom_dataset/',
                                          image_size=(28,28))
 
-label = ['bra', 'pantie', 'pants', 'shirt',
-               'short pants', 'skirt', 'socks', 't-shirt']
+label = ['long_pants', 'long_sleeve', 'short_pants', 'short_sleeve']
+
 
 idx = 0
 class_label = dict()
