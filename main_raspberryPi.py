@@ -192,7 +192,7 @@ while True:
 
 
         ####################################################################################### fashion-mnist ?  고리 ? ################################################################################
-        MNIST_model = tf.keras.models.load_model('/home/pi/caps/custom.h5', compile=False)
+        MNIST_model = tf.keras.models.load_model('/custom_final.h5', compile=False)
         img = tf.keras.preprocessing.image.load_img(
             './result2.png',
             target_size=(28, 28),
