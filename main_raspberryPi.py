@@ -33,14 +33,30 @@ while True:
             camera.release()
             
         cv2.imwrite('result_image/image.jpg',frame)
-        print('Image captured') # 이미지 캡처 완료 메시지 출력
-        ser.write(b"done\n")
-        frame = [] # frame =0
         imageUrl = 'result_image/image.jpg'
-        print("image capture and save part: ", start - time.time())
-        ####
+        print('Image captured') # 이미지 캡처 완료 메시지 출력
+
+        frame = [] # frame =0
+        img = cv2.imread(imageUrl)
+        ori_img = img
         start = time.time()
         img = cv2.imread(imageUrl)
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        img[:,:,0] = clahe.apply(img[:,:,0])
+        img[:,:,1] = clahe.apply(img[:,:,1])
+        img[:,:,2] = clahe.apply(img[:,:,2])
+
+        img = cv2.resize(img, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
+        ori_img = cv2.resize(img, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
+        print("Origin image size: ", img.shape)
+        image_gray = cv2.imread('result_img/img.jpg', cv2.IMREAD_GRAYSCALE)
+        image_gray = cv2.resize(image_gray, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
+        cv2.imwrite('result_img/gray.jpg', image_gray)
+        # image_gray = cv2.normalize(image_gray, None, 0, 255, cv2.NORM_L1)
+        image_gray = cv2.equalizeHist(image_gray)
+        cv2.imwrite('result_img/gray_nor.jpg', image_gray)ㅓ
+        image = img[:290, 0:545]
+        image_gray = image_gray[:290, 0:545]
         alpha2 = 50
         array = np.full(img.shape, (alpha2, alpha2, alpha2), dtype=np.uint8)
         img = cv2.add(img, array)
