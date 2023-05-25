@@ -54,9 +54,19 @@ while True:
         cv2.imwrite('result_img/gray.jpg', image_gray)
         # image_gray = cv2.normalize(image_gray, None, 0, 255, cv2.NORM_L1)
         image_gray = cv2.equalizeHist(image_gray)
-        cv2.imwrite('result_img/gray_nor.jpg', image_gray)ㅓ
+        cv2.imwrite('result_img/gray_nor.jpg', image_gray)
         image = img[:290, 0:545]
         image_gray = image_gray[:290, 0:545]
+        blur = cv2.GaussianBlur(image_gray, ksize=(3,3), sigmaX=0)
+        ret, thresh1 = cv2.threshold(blur, 127, 255, cv2.THRESH_BINARY)
+
+        edged = cv2.Canny(blur, 10, 250)
+
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7,7))
+        closed = cv2.morphologyEx(edged, cv2.MORPH_CLOSE, kernel)
+
+        contours, _ = cv2.findContours(closed.copy(),cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        total = 0
         alpha2 = 50
         array = np.full(img.shape, (alpha2, alpha2, alpha2), dtype=np.uint8)
         img = cv2.add(img, array)
