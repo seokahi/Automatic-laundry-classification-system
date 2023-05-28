@@ -67,24 +67,52 @@ while True:
 
         contours, _ = cv2.findContours(closed.copy(),cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         total = 0
-        alpha2 = 50
-        array = np.full(img.shape, (alpha2, alpha2, alpha2), dtype=np.uint8)
-        img = cv2.add(img, array)
-        # img = np.clip(img + (img - 128) * alpha2, 0, 255).astype(np.uint8)
-        print(len(img))
-        cv2.imwrite('result_image/image_daebi.jpg',img)
-        print("image read and contrast processing part: ", start - time.time())
-        ####
-        start = time.time()
-        # img = cv2.resize(img, dsize=(0, 0), fx=0.2, fy=0.2,
-        #                 interpolation=cv2.INTER_LINEAR)
-        # rect = cv2.selectROI("location", img, False, False)
-        # print(rect)
-        # rect = (70, 0, 480, 390) #ROIl
-        # rect = (70,20,550,400)
-        rect = cv2.selectROI("location", img, False, False)
 
-        cv2.destroyAllWindows()
+        contours_xy = np.array(contours)
+        contours_xy.shape
+
+        x_min, x_max = 0,0
+        value = list()
+        for i in range(len(contours_xy)):
+            for j in range(len(contours_xy[i])):
+                value.append(contours_xy[i][j][0][0])
+                x_min = min(value)
+                x_max = max(value)
+
+        y_min, y_max = 0,0
+        value = list()
+        for i in range(len(contours_xy)):
+            for j in range(len(contours_xy[i])):
+                value.append(contours_xy[i][j][0][1]) 
+                y_min = min(value)
+                y_max = max(value)
+
+        
+        x = x_min
+        y = y_min
+        w = x_max-x_min
+        h = y_max-y_min
+
+        if x < 10:
+            x = 0
+        else:
+            x = x - 10
+        if y < 10:
+            y = 10
+        else:
+            y = y - 10
+        if w > 630:
+            w = 640
+        else:
+            w = w + 10
+        if h > 470:
+            h = 480
+        else:
+            h = h + 10
+        rect = (x, y, w, h)
+
+        img_trim = image[y:y+h, x:x+w]
+        cv2.imwrite('result_img/autoROI_res.jpg', img_trim)
 
         mask = np.zeros(img.shape[:2], np.uint8)
 
