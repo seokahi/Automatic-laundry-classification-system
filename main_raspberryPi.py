@@ -135,46 +135,19 @@ while True:
 
         mask3 = cv2.inRange(result2, np.array([0, 0, 0]), np.array([8, 8, 8]))
         result2[mask3 == 255] = (255, 255, 255)
-        # 결과 출력
-        # cv2.imshow('result', result)
-        # cv2.imshow('result2', result2)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
-        cv2.imwrite("result.png", result)
-        cv2.imwrite("result2.png", result2)
-        print("mask processing part: ", start - time.time())
-        ####
-        #####################################################################################
-
-        ########################################################################################################
-
-        ####################################################################################### 그랩 ? ?  고리 ? ################################################################################
-
+        
         ####################################################################################### k-means ?  고리 ? ################################################################################
+        ## k-means
+        image = cv2.imread('result2.png')
 
-        img = cv2.imread('result2.png')
-        image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-        # checkpoint##########################
-        mask = cv2.inRange(image, (0, 0, 0), (255, 255, 255))
-        image = cv2.bitwise_and(image, image, mask=mask)
-
-        # image = cv2.cvtColor(grabcut_image_PIL, cv2.COLOR_BGR2RGB)
-
-        img_np = np.asarray(image)
-  
-        image = img_np.reshape(img_np.shape[0] * img_np.shape[1], img_np.shape[2])
-        image = image.reshape((image.shape[0] * image.shape[1], 3))  # height, width ?  ?  
+        k = 3
+        image = image.reshape((image.shape[0] * image.shape[1], 3)) 
 
         mask = np.all(image != [255, 255, 255], axis=-1)
         image = image[mask]
-
-        k = 3
         model = KMeans(n_clusters=k, random_state=10)
-        model.fit(image)
 
-        for center in model.cluster_centers_:
-            print(center)
+        model.fit(image)
 
   
 
