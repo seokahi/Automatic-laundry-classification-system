@@ -185,8 +185,7 @@ while True:
         h1, s1, v1 = colorsys.rgb_to_hsv(
             mylists[max_index][0]/255, mylists[max_index][1]/255, mylists[max_index][2]/255)
 
-        print("명도", v1)
-        if (v1 > 0.5):
+        if (v1 > 0.2):
             flag = "light"
         else:
             flag= "dark"
