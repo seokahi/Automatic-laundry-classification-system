@@ -211,15 +211,15 @@ while True:
         print('Predicted class:', class_names[class_index])
 
    
-        if (class_names[class_index] == "bra" or class_names[class_index] == "pantie"):
-            print("under")
-            ser.write(b'1\n')
-        elif ((class_names[class_index] != "bra" or class_names[class_index] == "pantie") and flag == "dark"):
-            print("dark clothes")
-            ser.write(b'2n')
-        else:
-            print("light clothes")
-            ser.write(b'3\n')
+        if (((class_index == 0) or (class_index == 2)) and (flag == 'dark')):
+            ser.write(b'1\n') # dark pants
+        elif (((class_index == 1) or (class_index == 3)) and (flag == 'dark')):
+            ser.write(b'2\n') # dark sleeve
+        elif (((class_index == 0) or (class_index == 2)) and (flag == 'light')):
+            ser.write(b'3\n') # light pants
+        elif (((class_index == 1) or (class_index == 3)) and (flag == 'light')):
+            ser.write(b'4\n') # light sleeve
+
         
         GPIO.input(button_pin) == GPIO.LOW
    
