@@ -190,7 +190,6 @@ while True:
         else:
             flag= "dark"
 
-        print("%s" %flag)
         MNIST_model = tf.keras.models.load_model('/custom_final.h5', compile=False)
         img = tf.keras.preprocessing.image.load_img(
             './result2.png',
@@ -206,8 +205,7 @@ while True:
         score = tf.nn.softmax(predictions[0])
 
         class_index = np.argmax(predictions[0])
-        class_names = ['bra', 'pantie', 'pants', 'shirt',
-                    'short pants', 'skirt', 'socks', 't-shirt']
+        class_names = ['long_pants', 'long_sleeve', 'short_pants', 'short_sleeve']
 
         print(class_index)
         print('Predicted class:', class_names[class_index])
