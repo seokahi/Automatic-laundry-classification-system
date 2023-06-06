@@ -89,6 +89,17 @@ void toEnd()
         }
     }
 }
+void DropTheCloth()
+{
+
+    myservo.write(10);
+    delay(1000);
+    for (int i = 10; i <= 80; i++)
+    {
+        myservo.write(i);
+        delay(10);
+    }
+}
 
 void loop()
 {
@@ -106,6 +117,7 @@ void loop()
         if (data == '1')
         {
             toStart();
+            DropTheCloth();
         }
         else if (data == '2')
         {
@@ -114,6 +126,7 @@ void loop()
         else if (data == '3')
         {
             toEnd();
+            DropTheCloth();
         }
         else if (data == '4')
         {
