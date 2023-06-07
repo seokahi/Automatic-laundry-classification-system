@@ -101,6 +101,22 @@ void DropTheCloth()
     }
 }
 
+void DropTheCloth_Mirror()
+{
+
+    for (int i = 80; i <= 150; i++)
+    {
+        myservo.write(i);
+        delay(7);
+    }
+    delay(1500);
+    for (int i = 150; i >= 80; i--)
+    {
+        myservo.write(i);
+        delay(10);
+    }
+}
+
 void loop()
 {
     char button_left = digitalRead(2);
@@ -122,15 +138,18 @@ void loop()
         else if (data == '2')
         {
             toStart();
+            DropTheCloth_Mirror();
         }
         else if (data == '3')
         {
             toEnd();
             DropTheCloth();
+            toStart();
         }
         else if (data == '4')
         {
             toEnd();
+            DropTheCloth_Mirror();
         }
     }
 }
