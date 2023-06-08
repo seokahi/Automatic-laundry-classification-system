@@ -117,6 +117,24 @@ void DropTheCloth_Mirror()
     }
 }
 
+void setup()
+{
+    pinMode(stepPin[0], OUTPUT);
+    pinMode(stepPin[1], OUTPUT);
+    pinMode(stepPin[2], OUTPUT);
+    pinMode(stepPin[3], OUTPUT);
+
+    pinMode(2, INPUT);
+    pinMode(3, INPUT);
+    pinMode(4, INPUT);
+
+    myservo.attach(6);
+    Serial.begin(9600);
+
+    myservo.write(80);
+    toStart();
+}
+
 void loop()
 {
     char button_left = digitalRead(2);
