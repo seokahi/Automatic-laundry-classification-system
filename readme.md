@@ -19,3 +19,17 @@
 | ![image](https://github.com/seokahi/Automatic-laundry-classification-system/assets/73926393/e537d971-1121-4905-9606-79446944ac88) | ![image](https://github.com/seokahi/Automatic-laundry-classification-system/assets/73926393/346fb70a-153f-43f9-9c44-faba0143da86) | ![image](https://github.com/seokahi/Automatic-laundry-classification-system/assets/73926393/ed6b2a56-3072-4984-af6f-6c2808556d42) | ![image](https://github.com/seokahi/Automatic-laundry-classification-system/assets/73926393/af1b2935-bca8-4b45-a255-b18b367c414e) |
 
 <br>
+
+## 기술
+
+- SW: PYTHON
+- HW: ARDUINO
+  <br>
+
+NOTION : https://www.notion.so/2023-a0f52ce9094f4ad48fd449035ede7589
+
+<br>
+
+**3. 제작 기간**: 2022.1.14 ~ 2022.06.14
+
+<br>
