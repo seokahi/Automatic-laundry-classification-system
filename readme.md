@@ -22,11 +22,14 @@
 
 ## 기술
 
+**1. 기술**
+
 - SW: PYTHON
 - HW: ARDUINO
   <br>
 
-NOTION : https://www.notion.so/2023-a0f52ce9094f4ad48fd449035ede7589
+**2. 개발진행**
+Conference : https://www.notion.so/2023-a0f52ce9094f4ad48fd449035ede7589
 
 <br>
 
@@ -34,7 +37,9 @@ NOTION : https://www.notion.so/2023-a0f52ce9094f4ad48fd449035ede7589
 
 <br>
 
-### 역할 분담
+## 역할 분담
+
+<br>
 
 **서가희**
 
