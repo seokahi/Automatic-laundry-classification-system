@@ -70,3 +70,34 @@ Conference : https://www.notion.so/2023-a0f52ce9094f4ad48fd449035ede7589
 ## 💻 기능 시연
 
 🔗[기능 시연 영상](https://youtube.com/watch?v=H7BfGfecXaQ&si=QKouZ4iAc-lwH7fb)
+
+## 💻 기능 구현
+
+**1. HW**
+
+**2. SW**
+
+- CLAHE Algorithm
+
+  - 의류 윤곽선 선명하게 처리 및 대비 조절
+  - Canny Function 을 통해 의류 모서리(외곽선) 추출
+  - morphology 기법을 통해 모서리 경계가 중간에 끊어지지 않도록 처리
+
+- ROI Choice
+
+  - CLAHE Algorithm을 통해 추출된 외곽선을 바탕으로 최소 ROI 자동 선택을 통해 모서리 경계가 중간에 끊어지지 않도록 처리
+
+- GrabCut Algorithm
+
+  - 촬영된 세탁물 이미지의 배경을 제거하여 의류의 색상만을 추출
+  - 불필요한 배경을 제거하여 의류 분류의 정확도를 향상
+
+- K-means Algorithm
+
+  - 랜덤으로 지정된 cluster 중심점을 시작으로 각 데이터로부터 대상이 속한 cluster 중심까지의 평균 거리 추출
+  - cluster 중심점을 평균 지점으로 이동하는 프로세스를 반복적으로 수행하여 3개의 cluster 결과 도출
+  - 결과를 바탕으로 GrabCut된 세탁물 이미지에서 가장 비율을 많이 차지하는 색상 탐색
+
+- Classification
+  - 상의, 하의를 어두운 색 옷과 밝은 색 옷으로 분류하여 총 4가지 카테고리로 분류
+  - 흐트러진 옷도 판별 가능하도록 카테고리 별 추가 데이터 학습 완료
